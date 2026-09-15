@@ -18,6 +18,12 @@
   --radius: 24px;
 }
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 a { color: inherit; text-decoration: none; }
 button, input, textarea, select { font: inherit; }
 button { cursor: pointer; }
@@ -477,6 +483,7 @@ button { cursor: pointer; }
 }
 
 .contact-form label {
+  min-width: 0;
   display: grid;
   gap: 7px;
   font-size: .88rem;
