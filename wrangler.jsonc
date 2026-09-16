@@ -1,7 +1,12 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "my-tech-hero",
+  "main": "worker.js",
   "compatibility_date": "2026-09-11",
+  "vars": {
+    "CONTACT_FROM_EMAIL": "request@mytechhero.net",
+    "CONTACT_TO_EMAIL": "request@mytechhero.net"
+  },
   "assets": {
     "directory": "./dist"
   },
