@@ -4,5 +4,11 @@
   "compatibility_date": "2026-09-11",
   "assets": {
     "directory": "./dist"
-  }
+  },
+  "routes": [
+    {
+      "pattern": "mytechhero.net",
+      "custom_domain": true
+    }
+  ]
 }
