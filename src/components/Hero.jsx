@@ -1,5 +1,5 @@
 import { siteConfig } from "../data/siteConfig";
-import logoMark from "../assets/mytechherologo.png";
+import logoMark from "../assets/heroNoBackground.png";
 
 export default function Hero() {
   return (
@@ -27,9 +27,9 @@ export default function Hero() {
           </div>
 
           <div className="trust-row">
-            <span>✓ Plain-English explanations</span>
+            <span>✓ Plain-English explanations. No tech-talk.</span>
             <span>✓ Remote & in-person options</span>
-            <span>✓ No judgment. No tech-speak.</span>
+            <span>✓ No judgment. </span>
           </div>
         </div>
 
