@@ -7,21 +7,31 @@ A Vite + React starter for the My Tech Hero business website.
 - React 19
 - Vite
 - Plain CSS
-- No custom backend in v1
+- Cloudflare Worker API
+- Resend email delivery
 
-## Why no backend yet?
+## Contact form email setup
 
-For the public marketing site, a backend would mostly add deployment and security work without adding much customer value.
+The contact form sends a `POST` request to `/api/contact`. The Cloudflare Worker validates the request and sends the notification through Resend. Email credentials are only stored in Cloudflare and are never bundled into the browser.
 
-The current architecture leaves a clean seam in:
+1. Create a Resend account and verify `mytechhero.net`.
+2. Create a Resend API key.
+3. Store the API key as a Cloudflare secret:
 
-`src/services/contactService.js`
+```bash
+npx wrangler secret put RESEND_API_KEY
+```
 
-That function can later call:
+The sender and recipient are both configured as `request@mytechhero.net` in `wrangler.jsonc`. Deploy with:
 
-1. Formspree / Basin / Netlify Forms for simple lead capture
-2. A Supabase Edge Function if you want server-side email + a database
-3. A Node/Express API if My Tech Hero eventually needs a true service platform
+```bash
+npm run build
+npx wrangler deploy
+```
+
+For local Worker testing, use `npm run build` followed by `npx wrangler dev`.
+
+Keep the Resend API key out of `.env`, source files, and the frontend. The Worker reads it from Cloudflare's encrypted secret store.
 
 ## When a backend becomes worth it
 
@@ -42,6 +52,7 @@ Add one when you need features such as:
 ## Recommended growth architecture
 
 ### Phase 1 — Launch
+
 React/Vite
 → static hosting
 → simple form provider
@@ -50,24 +61,46 @@ React/Vite
 → Google Business Profile
 
 ### Phase 2 — Operations
-React
+
+## Stack
+
 → Supabase Postgres
 → Supabase Auth
 → Edge Functions
 → contact + appointment records
-→ internal dashboard
 
-### Phase 3 — Service platform
+- Cloudflare Worker API
+- Resend email delivery
+
+## Contact form email setup
+
 React customer portal
-→ API/service layer
+The contact form sends a `POST` request to `/api/contact`. The Cloudflare Worker validates the request and sends the notification through Resend. Email credentials are only stored in Cloudflare and are never bundled into the browser.
 → customer/device/ticket history
-→ payments
-→ notifications
-→ technician workflows
 
-At that point, you can decide whether Supabase remains enough or whether a dedicated Node/Express API is justified.
+1. Create a Resend account and verify the sending domain.
+2. Create a Resend API key.
+3. Set the Worker secrets and variables:
+   → notifications
 
-## Run locally
+```bash
+npx wrangler secret put RESEND_API_KEY
+npx wrangler secret put CONTACT_TO_EMAIL
+npx wrangler secret put CONTACT_FROM_EMAIL
+```
+
+`CONTACT_FROM_EMAIL` must use an address on a domain verified in Resend. `CONTACT_TO_EMAIL` is the inbox that should receive new requests.
+
+4. Build and deploy:
+
+```bash
+npm run build
+npx wrangler deploy
+```
+
+For local Worker testing, use `npm run build` followed by `npx wrangler dev`.
+
+Keep the Resend API key out of `.env`, source files, and the frontend. The Worker reads it from Cloudflare's encrypted secret store.
 
 ```bash
 npm install

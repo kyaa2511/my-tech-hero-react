@@ -4,7 +4,7 @@ export const siteConfig = {
   serviceArea: 'Indianapolis and surrounding areas',
   phoneDisplay: 'Add business phone',
   phoneHref: '',
-  email: 'Add business email',
+  email: 'request@mytechhero.net',
   bookingUrl: '',
   hours: 'By appointment',
 }
