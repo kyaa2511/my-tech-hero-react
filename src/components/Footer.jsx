@@ -1,4 +1,4 @@
-import { siteConfig } from '../data/siteConfig'
+import { siteConfig } from "../data/siteConfig";
 
 export default function Footer() {
   return (
@@ -10,16 +10,18 @@ export default function Footer() {
         </div>
 
         <div className="footer-links">
-          <a href="#services">Services</a>
-          <a href="#support">Support options</a>
-          <a href="#contact">Contact</a>
+          <a href="/#services">Services</a>
+          <a href="/#support">Support options</a>
+          <a href="/#contact">Contact</a>
         </div>
 
         <div className="footer-meta">
           <span>{siteConfig.serviceArea}</span>
-          <span>© {new Date().getFullYear()} {siteConfig.businessName}</span>
+          <span>
+            © {new Date().getFullYear()} {siteConfig.businessName}
+          </span>
         </div>
       </div>
     </footer>
-  )
+  );
 }

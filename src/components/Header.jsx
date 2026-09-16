@@ -10,7 +10,7 @@ export default function Header() {
   return (
     <header className="site-header">
       <div className="container nav-wrap">
-        <a className="brand" href="#top" onClick={close}>
+        <a className="brand" href="/#top" onClick={close}>
           <img className="brand-mark" src={logoMark} alt="" />
           <span className="brand-copy">
             <strong>{siteConfig.businessName}</strong>
@@ -34,16 +34,19 @@ export default function Header() {
           className={`main-nav ${open ? "open" : ""}`}
           aria-label="Main navigation"
         >
-          <a href="#services" onClick={close}>
+          <a href="/#services" onClick={close}>
             Services
           </a>
-          <a href="#support" onClick={close}>
+          <a href="/#support" onClick={close}>
             Ways to Get Help
           </a>
-          <a href="#about" onClick={close}>
+          <a href="/#about" onClick={close}>
             About
           </a>
-          <a href="#contact" className="button button-small" onClick={close}>
+          <a href="/pricing" onClick={close}>
+            Pricing
+          </a>
+          <a href="/#contact" className="button button-small" onClick={close}>
             Get Help
           </a>
         </nav>
