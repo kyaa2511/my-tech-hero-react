@@ -18,14 +18,14 @@ export default function Contact() {
               aria-label="Call or text support"
             >
               <span className="contact-card-label">Want to talk now?</span>
-              <a className="contact-phone" href="tel:3176405837">
-                317-640-5837
+              <a className="contact-phone" href="tel:+14632233787">
+                463-223-3787
               </a>
               <div className="contact-card-actions">
-                <a className="button button-light" href="tel:3176405837">
+                <a className="button button-light" href="tel:+14632233787">
                   Call Now
                 </a>
-                <a className="button button-outline" href="sms:3176405837">
+                <a className="button button-outline" href="sms:+14632233787">
                   Text Us
                 </a>
               </div>
