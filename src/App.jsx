@@ -8,35 +8,54 @@ import About from "./components/About";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import Pricing from "./components/Pricing";
+import RequestReceived from "./components/RequestReceived";
 
 export default function App() {
   const isPricingPage = window.location.pathname === "/pricing";
+  const isRequestReceivedPage =
+    window.location.pathname === "/request-received";
 
   useEffect(() => {
-    const metadata = isPricingPage
+    const metadata = isRequestReceivedPage
       ? {
-          title: "Tech Support Pricing | My Tech Hero",
+          title: "Request Received | My Tech Hero",
           description:
-            "Explore straightforward tech support pricing from My Tech Hero for friendly help in Indianapolis and surrounding areas.",
-          canonical: "https://mytechhero.net/pricing",
-          ogTitle: "Tech Support Pricing | My Tech Hero",
+            "Your My Tech Hero support request was received and will be reviewed soon.",
+          canonical: "https://mytechhero.net/request-received",
+          ogTitle: "Request Received | My Tech Hero",
           ogDescription:
-            "Explore straightforward tech support pricing from My Tech Hero for friendly help in Indianapolis and surrounding areas.",
+            "Your My Tech Hero support request was received and will be reviewed soon.",
+          robots: "noindex, nofollow",
         }
-      : {
-          title: "Friendly Tech Support in Indianapolis | My Tech Hero",
-          description:
-            "Friendly technology support for homes and small businesses in Indianapolis and surrounding areas. My Tech Hero helps make frustrating tech feel manageable.",
-          canonical: "https://mytechhero.net/",
-          ogTitle: "Friendly Tech Support in Indianapolis | My Tech Hero",
-          ogDescription:
-            "Friendly technology support for homes and small businesses in Indianapolis and surrounding areas.",
-        };
+      : isPricingPage
+        ? {
+            title: "Tech Support Pricing | My Tech Hero",
+            description:
+              "Explore straightforward tech support pricing from My Tech Hero for friendly help in Indianapolis and surrounding areas.",
+            canonical: "https://mytechhero.net/pricing",
+            ogTitle: "Tech Support Pricing | My Tech Hero",
+            ogDescription:
+              "Explore straightforward tech support pricing from My Tech Hero for friendly help in Indianapolis and surrounding areas.",
+            robots: "index, follow",
+          }
+        : {
+            title: "Friendly Tech Support in Indianapolis | My Tech Hero",
+            description:
+              "Friendly technology support for homes and small businesses in Indianapolis and surrounding areas. My Tech Hero helps make frustrating tech feel manageable.",
+            canonical: "https://mytechhero.net/",
+            ogTitle: "Friendly Tech Support in Indianapolis | My Tech Hero",
+            ogDescription:
+              "Friendly technology support for homes and small businesses in Indianapolis and surrounding areas.",
+            robots: "index, follow",
+          };
 
     document.title = metadata.title;
     document
       .querySelector('meta[name="description"]')
       ?.setAttribute("content", metadata.description);
+    document
+      .querySelector('meta[name="robots"]')
+      ?.setAttribute("content", metadata.robots);
 
     let canonical = document.querySelector('link[rel="canonical"]');
     if (!canonical) {
@@ -82,7 +101,9 @@ export default function App() {
   return (
     <>
       <Header />
-      {isPricingPage ? (
+      {isRequestReceivedPage ? (
+        <RequestReceived />
+      ) : isPricingPage ? (
         <Pricing />
       ) : (
         <main>

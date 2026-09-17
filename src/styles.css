@@ -147,6 +147,40 @@ button { cursor: pointer; }
   color: var(--ink);
 }
 
+.request-received-section {
+  min-height: 62vh;
+  display: grid;
+  align-items: center;
+  background:
+    radial-gradient(circle at 86% 12%, rgba(244,185,66,.22), transparent 26%),
+    linear-gradient(180deg, #fff, #f7fbfc);
+}
+
+.request-received-content {
+  max-width: 680px;
+  text-align: center;
+}
+
+.request-received-content h1 {
+  margin: 12px 0 16px;
+  font-size: clamp(2.4rem, 6vw, 4.5rem);
+}
+
+.request-received-content p {
+  max-width: 560px;
+  margin: 0 auto;
+  color: var(--muted);
+  font-size: 1.1rem;
+}
+
+.request-received-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 30px;
+}
+
 .hero {
   position: relative;
   overflow: hidden;

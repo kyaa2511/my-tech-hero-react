@@ -87,6 +87,7 @@ export default function ContactForm() {
       setStatus({ type: "success", message: result.message });
       setForm(initialState);
       resetTurnstile();
+      window.location.assign("/request-received");
     } catch {
       resetTurnstile();
       setStatus({
