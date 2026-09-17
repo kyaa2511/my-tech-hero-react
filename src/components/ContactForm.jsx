@@ -17,7 +17,15 @@ export default function ContactForm() {
   const turnstileRef = useRef(null);
   const widgetIdRef = useRef(null);
 
+  const resetTurnstile = () => {
+    setTurnstileToken("");
+    if (window.turnstile && widgetIdRef.current !== null) {
+      window.turnstile.reset(widgetIdRef.current);
+    }
+  };
+
   useEffect(() => {
+    const scriptId = "cloudflare-turnstile-script";
     const renderWidget = () => {
       if (
         !window.turnstile ||
@@ -40,13 +48,18 @@ export default function ContactForm() {
       return undefined;
     }
 
-    const script = document.createElement("script");
-    script.src =
-      "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
-    script.async = true;
-    script.defer = true;
+    let script = document.getElementById(scriptId);
+    if (!script) {
+      script = document.createElement("script");
+      script.id = scriptId;
+      script.src =
+        "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
+      script.async = true;
+      script.defer = true;
+      document.head.appendChild(script);
+    }
+
     script.addEventListener("load", renderWidget);
-    document.head.appendChild(script);
 
     return () => script.removeEventListener("load", renderWidget);
   }, []);
@@ -73,11 +86,9 @@ export default function ContactForm() {
       const result = await submitContactRequest(form, turnstileToken);
       setStatus({ type: "success", message: result.message });
       setForm(initialState);
-      setTurnstileToken("");
-      if (window.turnstile && widgetIdRef.current !== null) {
-        window.turnstile.reset(widgetIdRef.current);
-      }
+      resetTurnstile();
     } catch {
+      resetTurnstile();
       setStatus({
         type: "error",
         message: "Something went wrong. Please try again.",
