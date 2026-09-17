@@ -38,8 +38,13 @@ export default function App() {
       .querySelector('meta[name="description"]')
       ?.setAttribute("content", metadata.description);
 
-    const canonical = document.querySelector('link[rel="canonical"]');
-    canonical?.setAttribute("href", metadata.canonical);
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) {
+      canonical = document.createElement("link");
+      canonical.setAttribute("rel", "canonical");
+      document.head.appendChild(canonical);
+    }
+    canonical.setAttribute("href", metadata.canonical);
 
     const openGraph = {
       "og:title": metadata.ogTitle,
@@ -49,6 +54,16 @@ export default function App() {
     Object.entries(openGraph).forEach(([property, content]) => {
       document
         .querySelector(`meta[property="${property}"]`)
+        ?.setAttribute("content", content);
+    });
+
+    const twitter = {
+      "twitter:title": metadata.ogTitle,
+      "twitter:description": metadata.ogDescription,
+    };
+    Object.entries(twitter).forEach(([name, content]) => {
+      document
+        .querySelector(`meta[name="${name}"]`)
         ?.setAttribute("content", content);
     });
 

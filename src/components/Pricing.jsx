@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-
 const popularServices = [
   [
     "New Computer Setup",
@@ -166,24 +164,6 @@ function PriceCard({
 }
 
 export default function Pricing() {
-  useEffect(() => {
-    const originalTitle = document.title;
-    const description = document.querySelector('meta[name="description"]');
-    const originalDescription = description?.getAttribute("content");
-
-    document.title = "Tech Support Pricing | My Tech Hero";
-    description?.setAttribute(
-      "content",
-      "Simple, upfront pricing for computer help, Wi-Fi setup, device support, tech lessons, and in-home technology services from My Tech Hero.",
-    );
-
-    return () => {
-      document.title = originalTitle;
-      if (description && originalDescription)
-        description.setAttribute("content", originalDescription);
-    };
-  }, []);
-
   return (
     <main className="pricing-page">
       <section className="pricing-hero">
