@@ -5,6 +5,7 @@ export const siteConfig = {
   phoneDisplay: ' 463-223-3787',
   phoneHref: 'tel:+14632233787',
   email: 'request@mytechhero.net',
+  turnstileSiteKey: '0x4AAAAAAE5mb3SnbUrjTbfK',
   bookingUrl: '',
   hours: 'By appointment',
 }
