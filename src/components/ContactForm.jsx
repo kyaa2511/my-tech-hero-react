@@ -1,38 +1,89 @@
-import { useState } from 'react'
-import { submitContactRequest } from '../services/contactService'
+import { useEffect, useRef, useState } from "react";
+import { submitContactRequest } from "../services/contactService";
+import { siteConfig } from "../data/siteConfig";
 
 const initialState = {
-  name: '',
-  email: '',
-  phone: '',
-  supportType: 'Not sure',
-  message: '',
-}
+  name: "",
+  email: "",
+  phone: "",
+  supportType: "Not sure",
+  message: "",
+};
 
 export default function ContactForm() {
-  const [form, setForm] = useState(initialState)
-  const [status, setStatus] = useState({ type: 'idle', message: '' })
+  const [form, setForm] = useState(initialState);
+  const [status, setStatus] = useState({ type: "idle", message: "" });
+  const [turnstileToken, setTurnstileToken] = useState("");
+  const turnstileRef = useRef(null);
+  const widgetIdRef = useRef(null);
+
+  useEffect(() => {
+    const renderWidget = () => {
+      if (
+        !window.turnstile ||
+        !turnstileRef.current ||
+        widgetIdRef.current !== null
+      )
+        return;
+
+      widgetIdRef.current = window.turnstile.render(turnstileRef.current, {
+        sitekey: siteConfig.turnstileSiteKey,
+        action: "contact",
+        callback: (token) => setTurnstileToken(token),
+        "expired-callback": () => setTurnstileToken(""),
+        "error-callback": () => setTurnstileToken(""),
+      });
+    };
+
+    if (window.turnstile) {
+      renderWidget();
+      return undefined;
+    }
+
+    const script = document.createElement("script");
+    script.src =
+      "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
+    script.async = true;
+    script.defer = true;
+    script.addEventListener("load", renderWidget);
+    document.head.appendChild(script);
+
+    return () => script.removeEventListener("load", renderWidget);
+  }, []);
 
   const update = (event) => {
-    const { name, value } = event.target
-    setForm((current) => ({ ...current, [name]: value }))
-  }
+    const { name, value } = event.target;
+    setForm((current) => ({ ...current, [name]: value }));
+  };
 
   const submit = async (event) => {
-    event.preventDefault()
-    setStatus({ type: 'loading', message: 'Sending request…' })
+    event.preventDefault();
+
+    if (!turnstileToken) {
+      setStatus({
+        type: "error",
+        message: "Please complete the security check and try again.",
+      });
+      return;
+    }
+
+    setStatus({ type: "loading", message: "Sending request…" });
 
     try {
-      const result = await submitContactRequest(form)
-      setStatus({ type: 'success', message: result.message })
-      setForm(initialState)
+      const result = await submitContactRequest(form, turnstileToken);
+      setStatus({ type: "success", message: result.message });
+      setForm(initialState);
+      setTurnstileToken("");
+      if (window.turnstile && widgetIdRef.current !== null) {
+        window.turnstile.reset(widgetIdRef.current);
+      }
     } catch {
       setStatus({
-        type: 'error',
-        message: 'Something went wrong. Please try again.',
-      })
+        type: "error",
+        message: "Something went wrong. Please try again.",
+      });
     }
-  }
+  };
 
   return (
     <form className="contact-form" onSubmit={submit}>
@@ -43,7 +94,13 @@ export default function ContactForm() {
         </label>
         <label>
           Email
-          <input type="email" name="email" value={form.email} onChange={update} required />
+          <input
+            type="email"
+            name="email"
+            value={form.email}
+            onChange={update}
+            required
+          />
         </label>
       </div>
 
@@ -75,8 +132,18 @@ export default function ContactForm() {
         />
       </label>
 
-      <button className="button" type="submit" disabled={status.type === 'loading'}>
-        {status.type === 'loading' ? 'Sending…' : 'Request Tech Help'}
+      <div
+        ref={turnstileRef}
+        className="turnstile-widget"
+        aria-label="Security check"
+      />
+
+      <button
+        className="button"
+        type="submit"
+        disabled={status.type === "loading"}
+      >
+        {status.type === "loading" ? "Sending…" : "Request Tech Help"}
       </button>
 
       {status.message && (
@@ -85,5 +152,5 @@ export default function ContactForm() {
         </p>
       )}
     </form>
-  )
+  );
 }

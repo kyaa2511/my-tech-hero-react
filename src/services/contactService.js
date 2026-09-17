@@ -1,8 +1,8 @@
-export async function submitContactRequest(payload) {
+export async function submitContactRequest(payload, turnstileToken) {
   const response = await fetch('/api/contact', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
+    body: JSON.stringify({ ...payload, turnstileToken }),
   })
 
   const result = await response.json().catch(() => null)
